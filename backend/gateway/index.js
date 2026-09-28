@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import proxy from "express-http-proxy";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { getCurrentUser } from "./controllers/user.controller.js";
+import protect from "./middleware/auth.middleware.js";
 
 dotenv.config();
 
@@ -23,14 +25,14 @@ app.use(
 app.use(cookieParser());
 
 app.use(
-  "/auth",
+  "/api/auth",
   proxy(AUTH_SERVICE_URL, {
     proxyReqPathResolver: (req) => {
       return `/auth${req.url}`;
     }
   })
 );
-
+app.use("/api/me",protect,getCurrentUser)
 app.get("/", (req, res) => {
   res.send("gateway is running");
 });
