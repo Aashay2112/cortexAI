@@ -32,6 +32,7 @@ app.use(
     }
   })
 );
+app.use("/api/chat",proxyWithHeader(process.env.CHAT_SERVICE_URL))
 app.use("/api/me",protect,getCurrentUser)
 app.get("/", (req, res) => {
   res.send("gateway is running");
